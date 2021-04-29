@@ -1,0 +1,37 @@
+Setup VM + box :
+Install Linux sans environnement, sans serveur web etcc..
+Autoriser ports 8000 et 8082 TCP entrant ( pour local + 443/80 pour http/https )
+Créer carte bridge avec IP sur le réseau physique
+
+Utilisateur VM : "server" // password : root
+Utilisateur Database : ( crée avec la secure install ) : seafile // Password : Password123
+Mot de passe root : root
+
+Config server :
+
+Server name : Ynov_cloud
+IP's de la VM ( NAT + Bridged : 192.168.233.130 et 192.168.1.26 )
+nano /etc/nginx/sites-available/seafile.conf ==> configuration ip seafile
+nano /opt/seafile/conf/ccnet.conf ==> configuration ccnet
+ln -s /etc/nginx/sites-available/seafile.conf /etc/nginx/sites-enabled/seafile.conf ==> raccourci qui pointe sur la conf pour lui dire de l'utiliser
+/opt/seafile/seafile-server-latest/ ==> chemin d'accés du serveur Seafile
+
+Configuration réseau Bridge
+
+nano /etc/network/interfaces :
+auto ens37
+iface ens37 inet dhcp
+allow-hotplug ens37
+dhclient -v ens37 ==> Donner ip a la carte bridge
+
+MySql + configuration nginx :
+
+mysql_secure_installation ==> setup mariaDB - mySql
+setup Server Seafile ( ./setup-seafile-mysql.sh ) option 2 ( base de donnée existante qu'on a crée grâce à mariaDB )
+mysql -u root -p ==> accéder au commandes mysql ( pour créer la bdd par ex )
+su - seafile ==> connexion user seafile
+
+ss -tlnp ==> trafic tcp/udp
+
+chown -R seafile:seafile /opt/seafile/seafile-server-latest ==> owner du fichier/dossier
+systemctl enable/status/start/stop nginx ==> commander nginx
