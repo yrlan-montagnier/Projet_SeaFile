@@ -17,16 +17,24 @@
 
 ## Procédure d'installation 
 
+### Port forwarding et cartes réseau : 
+
+**On a créé une carte bridge grâce au virtual network editor de vmware.**
+
+**Pour ouvrir les port 80 et 443, on se rend sur l'interface de la box (192.168.1.1 pour box orange), onglet réseau/NAT puis on set les règles pour l'équipement qui correspond à l'IP de notre carte bridge de la VM ( vérifiée avec ip a)**
+
 ### Téléchargement de SeaFile et des dépendances
 
 ```
 mkdir /opt/seafile
-cd /opt/seafile
 ```
 
 #### Téléchargement de  l'archive de Seafile :
 
-https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_7.1.5_x86-64.tar.gz
+```
+cd /opt/seafile
+wget O /var/safile-server_7.1.5_x86-64.tar.gz https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-server_7.1.5_x86-64.tar.gz
+```
 
 On décompresse les fichiers de l'archive, et on supprime ou déplace l'archive dans un dossier "installed" :
 ```
@@ -53,10 +61,9 @@ systemctl enable mariadb
 ### Création des bases de données et assignation des permissions à l'utilisateur "Seafile"
 
 #### Setup de MariaDB:
-```
-mysql_secure_installation
-```
-==> Il faut choisir "yes" pour toutes les étapes lors du Setup.
+**IMPORTANT : Il faut choisir "yes" pour toutes les étapes lors du Setup de MariaDB.**
+
+```mysql_secure_installation``` ==> Script d'installation de MariaDB
 
 #### Création des bases de données :
 ```
@@ -175,7 +182,7 @@ CONNECTION_CHARSET = utf8
 
 ### Mise en place d'un DNS Dynamique 
 
-Pour mettre en place une adresse fixe pour notre espace de stockage, on a utilisé de site no-ip et son logiciel, qui nous permet de rediriger notre ip publique sur une adresse fixe qui est ynovcloud.ddns.net
+**Pour mettre en place une adresse fixe pour notre espace de stockage, on a utilisé de site no-ip et son logiciel, qui nous permet de rediriger notre ip publique sur une adresse fixe qui est ynovcloud.ddns.net**
 
 1. On s'inscrit sur https://www.noip.com/ et on crée le domaine ynovcloud.ddns.net
 2. On installe le client de NoIP pour rediriger l'IP publique sur ynovcloud.ddns.net
@@ -183,6 +190,15 @@ Pour mettre en place une adresse fixe pour notre espace de stockage, on a utilis
 4. Onglet Réseau/DynDNS ( dépend de la box internet ou routeur )
 5. On rentre les logs de noip.com ainsi que l'URL ynovcloud.ddns.net dans "nom d'hôte"
 
+### Lancement et contrôle du serveur 
+
+**Pour lancer le serveur, il faut se connecter avec l'utilisateur attribués à la BDD et aux fichiers de Seafile.**
+1. Pour le faire, on se met déja en root `su -` puis on fais un `su - seafile`.
+2. Puis on fais un `cd /opt/seafile/seafile-server-latest`
+3. Enfin on peut utiliser les commandes `./seafile.sh start/stop/restart` et `./seahub.sh start/stop/restart`
+
 ## Connexion au stockage en ligne
 
-Pour accéder à l'espace de stockage en ligne qui vient d'être installé sur votre machine, vous allez devoir entrer l'adresse du serveur (http://ynovcloud.ddns.net/) que nous avons mis en place à l'aide de noip.com dans un navigateur internet.
+**Pour accéder à l'espace de stockage en ligne qui vient d'être installé sur votre machine :**
+1. Entrer l'adresse du serveur (http://ynovcloud.ddns.net/) que nous avons mis en place à l'aide de noip.com dans un navigateur internet.
+2. Vous pouvez ensuite créer un compte ou vous connecter.
