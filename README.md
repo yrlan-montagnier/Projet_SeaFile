@@ -245,3 +245,4 @@ Pour le monitoring, nous conseillons de surveiller :
 - l'état du site http://ynovcloud.ddns.net:8000/
 - avoir une alerte en direct quand quelqu'un se connecte
 - pour les températures trop élevées des composants , une alerte est envoyé aux gérants du serveur
+- vérifier l'état du dossier data/haiwen/
