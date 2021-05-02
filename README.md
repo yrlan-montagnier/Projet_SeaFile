@@ -202,3 +202,46 @@ CONNECTION_CHARSET = utf8
 **Pour accéder à l'espace de stockage en ligne qui vient d'être installé sur votre machine :**
 1. Entrer l'adresse du serveur (http://ynovcloud.ddns.net/) que nous avons mis en place à l'aide de noip.com dans un navigateur internet.
 2. Vous pouvez ensuite créer un compte ou vous connecter.
+
+## Backup et monitoring
+
+-Pour le backup, il faut:
+
+~créer un dossier `` /backup `` sur le disque secondaire et créer deux autres dossier à l'intérieur de celui-ci :
+- ``---- databases/``   ( contient des fichiers de sauvegarde de base de données)
+- ``---- data/``        ( contient des sauvegardes du répertoire de données)
+
+~localiser les dossiers que l'on veut copier vers le dossier backup :
+---- /data/haiwen
+
+Si vous utilisez comme nous MySQL, les noms des databases devraient être ``ccnet-db``, ``seafile-dbet``et ``seahub-db``.
+
+entrez alors ces commandes pour copier les données des databases : (pas besoin d'arreter le serveur pendant le transfert de données)
+
+`` mysqldump -h [mysqlhost] -u[username] -p[password] --opt ccnet-db > /backup/databases/ccnet-db.sql.`date +"%Y-%m-%d-%H-%M-%S"` ``
+
+`` mysqldump -h [mysqlhost] -u[username] -p[password] --opt seafile-db > /backup/databases/seafile-db.sql.`date +"%Y-%m-%d-%H-%M-%S"` ``
+
+`` mysqldump -h [mysqlhost] -u[username] -p[password] --opt seahub-db > /backup/databases/seahub-db.sql.`date +"%Y-%m-%d-%H-%M-%S"` ``
+
+- Pour copier directement toutes les données il suffit de faire:
+
+``cp -R /data/haiwen /backup/data/haiwen-`date +"%Y-%m-%d-%H-%M-%S"` ``
+
+Le problème de cette commande c'est qu'elle copie tout à chaque fois donc si il y a le moindre espace en plus et bien tout va être copié .
+
+Nous conseillons plutôt la méthode de sauvegarde incrémentielle, bien plus opti : 
+
+`` rsync -az /data/haiwen /backup/data ``
+
+------------------------------------------------------------------------------
+
+Pour le monitoring, nous conseillons de surveiller :
+
+- le CPU ( température et pourcentage d'utilisation )
+- la ram ( espace disponible et température )
+- les systèmes de stockages ( température , vie restante en écriture , vitesse d'écriture et de lecture,alerte si le disque dur n'est plus reconnu )
+- le réseau (bande passante , perte de packet , temps de réponse)
+- l'état du site http://ynovcloud.ddns.net:8000/
+- avoir une alerte en direct quand quelqu'un se connecte
+- pour les températures trop élevées des composants , une alerte est envoyé aux gérants du serveur
