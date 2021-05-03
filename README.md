@@ -212,11 +212,11 @@ CONNECTION_CHARSET = utf8
 - ``---- data/``        ( contient des sauvegardes du répertoire de données)
 
 ~localiser les dossiers que l'on veut copier vers le dossier backup :
----- /opt/seafile/seafile-data
----- /opt/seafile/seahub-data
----- /opt/seafile/ccnet
----- /opt/seafile/conf
----- /opt/seafile/seahub-db
+- /opt/seafile/seafile-data
+- /opt/seafile/seahub-data
+- /opt/seafile/ccnet
+- /opt/seafile/conf
+- /opt/seafile/seahub-db
 
 Si vous utilisez comme nous MySQL, les noms des databases devraient être ``ccnet-db``, ``seafile-dbet``et ``seahub-db``.
 
